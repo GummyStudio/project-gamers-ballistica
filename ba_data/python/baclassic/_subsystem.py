@@ -58,10 +58,6 @@ class ClassicSubsystem(babase.AppSubsystem):
         self.store = StoreSubsystem()
         self.music = MusicSubsystem()
 
-        # Co-op Campaigns.
-        self.campaigns: dict[str, bascenev1.Campaign] = {}
-        self.custom_coop_practice_games: list[str] = []
-
         # Lobby.
         self.lobby_random_profile_index: int = 1
         self.lobby_random_char_index_offset = random.randrange(1000)
@@ -147,8 +143,6 @@ class ClassicSubsystem(babase.AppSubsystem):
 
     @override
     def on_app_loading(self) -> None:
-        from bascenev1lib import maps as stdmaps
-
         from baclassic._appdelegate import AppDelegate
 
         plus = babase.app.plus
@@ -165,29 +159,6 @@ class ClassicSubsystem(babase.AppSubsystem):
         # (so I don't accidentally release a build that can't play tourneys)
         if not env.debug and not env.test and not plus.is_blessed():
             babase.screenmessage('WARNING: NON-BLESSED BUILD', color=(1, 0, 0))
-
-        # FIXME: This should not be hard-coded.
-        for maptype in [
-            stdmaps.HockeyStadium,
-            stdmaps.FootballStadium,
-            stdmaps.Bridgit,
-            stdmaps.BigG,
-            stdmaps.Roundabout,
-            stdmaps.MonkeyFace,
-            stdmaps.ZigZag,
-            stdmaps.ThePad,
-            stdmaps.DoomShroom,
-            stdmaps.LakeFrigid,
-            stdmaps.TipTop,
-            stdmaps.CragCastle,
-            stdmaps.TowerD,
-            stdmaps.HappyThoughts,
-            stdmaps.StepRightUp,
-            stdmaps.Courtyard,
-            stdmaps.Rampage,
-        ]:
-            bascenev1.register_map(maptype)
-        bascenev1.init_campaigns()
 
         launch_count = cfg.get('launchCount', 0)
         launch_count += 1

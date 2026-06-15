@@ -89,10 +89,6 @@ class Session:
     """A shared dictionary for objects to use as storage on this session.
        Ensure that keys here are unique to avoid collisions."""
 
-    sessionteams: list[bascenev1.SessionTeam]
-    """All the bascenev1.SessionTeams in the Session. Most things should
-       use the list of bascenev1.Team-s in bascenev1.Activity; not this."""
-
     def __init__(
         self,
         depsets: Sequence[bascenev1.DependencySet],
@@ -122,7 +118,6 @@ class Session:
         from bascenev1._stats import Stats
         from bascenev1._gameactivity import GameActivity
         from bascenev1._activity import Activity
-        from bascenev1._team import SessionTeam
 
         # First off, resolve all dependency-sets we were passed.
         # If things are missing, we'll try to gather them into a single
@@ -195,35 +190,6 @@ class Session:
         self._activity_should_end_immediately_delay = 0.0
 
         # Create static teams if we're using them.
-        if self.use_teams:
-            if team_names is None:
-                raise RuntimeError(
-                    'use_teams is True but team_names not provided.'
-                )
-            if team_colors is None:
-                raise RuntimeError(
-                    'use_teams is True but team_colors not provided.'
-                )
-            if len(team_colors) != len(team_names):
-                raise RuntimeError(
-                    f'Got {len(team_names)} team_names'
-                    f' and {len(team_colors)} team_colors;'
-                    f' these numbers must match.'
-                )
-            for i, color in enumerate(team_colors):
-                team = SessionTeam(
-                    team_id=self._next_team_id,
-                    name=GameActivity.get_team_display_string(team_names[i]),
-                    color=color,
-                )
-                self.sessionteams.append(team)
-                self._next_team_id += 1
-                try:
-                    with self.context:
-                        self.on_team_join(team)
-                except Exception:
-                    logging.exception('Error in on_team_join for %s.', self)
-
         self.lobby = Lobby()
         self.stats = Stats()
 

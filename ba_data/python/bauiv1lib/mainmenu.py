@@ -219,7 +219,7 @@ class MainMenuWindow(bui.Window):
             and app.classic.subplatform == 'oculus'
         )
 
-        self._have_store_button = not self._in_game
+        self._have_store_button = False
 
         self._have_settings_button = (
             not self._in_game or not app.ui_v1.use_toolbars
@@ -830,6 +830,7 @@ class MainMenuWindow(bui.Window):
         )
         if not self._in_game and enable_account_button:
             this_b_width = self._button_width
+            self._p_index += 1
             h, v, scale = positions[self._p_index]
             self._p_index += 1
             self._account_button = bui.buttonwidget(
@@ -870,21 +871,6 @@ class MainMenuWindow(bui.Window):
             self._tdelay += self._t_delay_inc
         else:
             self._account_button = None
-
-        # How-to-play button.
-        h, v, scale = positions[self._p_index]
-        self._p_index += 1
-        btn = bui.buttonwidget(
-            parent=self._root_widget,
-            position=(h - self._button_width * 0.5 * scale, v),
-            scale=scale,
-            autoselect=self._use_autoselect,
-            size=(self._button_width, self._button_height),
-            label=bui.Lstr(resource=self._r + '.howToPlayText'),
-            transition_delay=self._tdelay,
-            on_activate_call=self._howtoplay,
-        )
-        self._how_to_play_button = btn
 
         # Scattered eggs on easter.
         if (
@@ -974,7 +960,7 @@ class MainMenuWindow(bui.Window):
         h_offset = 0
         d_h_offset = 0
         v_offset = -50
-        for _i in range(6 + len(custom_menu_entries)):
+        for _i in range(4 + len(custom_menu_entries)):
             positions.append((h, v, 1.0))
             v += v_offset
             h += h_offset

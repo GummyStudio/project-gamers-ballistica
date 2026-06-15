@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-class MainMenuActivity(bs.Activity[bs.Player, bs.Team]):
+class MainMenuActivity(bs.Activity[bs.Player]):
     """Activity showing the rotating main menu bg stuff."""
 
     _stdassets = bs.Dependency(bs.AssetPackage, 'stdassets@1')
@@ -895,9 +895,6 @@ def _preload1() -> None:
     ]:
         bs.gettexture(tex)
     bs.gettexture('bg')
-    from bascenev1lib.actor.powerupbox import PowerupBoxFactory
-
-    PowerupBoxFactory.get()
     bui.apptimer(0.1, _preload2)
 
 
@@ -929,9 +926,6 @@ def _preload2() -> None:
         'gong',
     ]:
         bs.getsound(sname)
-    from bascenev1lib.actor.bomb import BombFactory
-
-    BombFactory.get()
     bui.apptimer(0.1, _preload3)
 
 
@@ -959,9 +953,6 @@ def _preload4() -> None:
         bs.getmesh(mname)
     for sname in ['metalHit', 'metalSkid', 'refWhistle', 'achievement']:
         bs.getsound(sname)
-    from bascenev1lib.actor.flag import FlagFactory
-
-    FlagFactory.get()
 
 
 class MainMenuSession(bs.Session):

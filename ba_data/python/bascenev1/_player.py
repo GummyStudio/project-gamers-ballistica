@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     import bascenev1
 
 PlayerT = TypeVar('PlayerT', bound='bascenev1.Player')
-TeamT = TypeVar('TeamT', bound='bascenev1.Team')
 
 
 @dataclass
@@ -44,7 +43,7 @@ class StandLocation:
     angle: float | None = None
 
 
-class Player(Generic[TeamT]):
+class Player:
     """A player in a specific bascenev1.Activity.
 
     Category: Gameplay Classes
@@ -64,7 +63,6 @@ class Player(Generic[TeamT]):
     color: Sequence[float]
     highlight: Sequence[float]
 
-    _team: TeamT
     _sessionplayer: bascenev1.SessionPlayer
     _nodeactor: bascenev1.NodeActor | None
     _expired: bool
@@ -102,8 +100,6 @@ class Player(Generic[TeamT]):
         self.character = sessionplayer.character
         self.color = sessionplayer.color
         self.highlight = sessionplayer.highlight
-        self._team = cast(TeamT, sessionplayer.sessionteam.activityteam)
-        assert self._team is not None
         self._customdata = {}
         self._expired = False
         self._postinited = True
@@ -128,7 +124,6 @@ class Player(Generic[TeamT]):
         except Exception:
             logging.exception('Error killing actor on leave for %s.', self)
         self._nodeactor = None
-        del self._team
         del self._customdata
 
     def expire(self) -> None:
@@ -147,7 +142,6 @@ class Player(Generic[TeamT]):
 
         self._nodeactor = None
         self.actor = None
-        del self._team
         del self._customdata
 
     def on_expire(self) -> None:
@@ -158,13 +152,6 @@ class Player(Generic[TeamT]):
         likely error). They should, however, remove any references to
         players/teams/games/etc. which could prevent them from being freed.
         """
-
-    @property
-    def team(self) -> TeamT:
-        """The bascenev1.Team for this player."""
-        assert self._postinited
-        assert not self._expired
-        return self._team
 
     @property
     def customdata(self) -> dict:
@@ -279,21 +266,10 @@ class Player(Generic[TeamT]):
         return self.exists()
 
 
-class EmptyPlayer(Player['bascenev1.EmptyTeam']):
+class EmptyPlayer(Player):
     """An empty player for use by Activities that don't need to define one.
 
     Category: Gameplay Classes
-
-    bascenev1.Player and bascenev1.Team are 'Generic' types, and so passing
-    those top level classes as type arguments when defining a
-    bascenev1.Activity reduces type safety. For example,
-    activity.teams[0].player will have type 'Any' in that case. For that
-    reason, it is better to pass EmptyPlayer and EmptyTeam when defining
-    a bascenev1.Activity that does not need custom types of its own.
-
-    Note that EmptyPlayer defines its team type as EmptyTeam and vice versa,
-    so if you want to define your own class for one of them you should do so
-    for both.
     """
 
 

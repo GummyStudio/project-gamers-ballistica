@@ -13,7 +13,6 @@ from bascenev1._activity import Activity
 
 # False-positive from pylint due to our class-generics-filter.
 from bascenev1._player import EmptyPlayer  # pylint: disable=W0611
-from bascenev1._team import EmptyTeam  # pylint: disable=W0611
 from bascenev1._music import MusicType, setmusic
 
 
@@ -22,7 +21,7 @@ if TYPE_CHECKING:
     from bascenev1._lobby import JoinInfo
 
 
-class EndSessionActivity(Activity[EmptyPlayer, EmptyTeam]):
+class EndSessionActivity(Activity[EmptyPlayer]):
     """Special Activity to fade out and end the current Session."""
 
     def __init__(self, settings: dict):
@@ -57,7 +56,7 @@ class EndSessionActivity(Activity[EmptyPlayer, EmptyTeam]):
         )
 
 
-class JoinActivity(Activity[EmptyPlayer, EmptyTeam]):
+class JoinActivity(Activity[EmptyPlayer]):
     """Standard activity for waiting for players to join.
 
     It shows tips and other info and waits for all players to check ready.
@@ -96,7 +95,7 @@ class JoinActivity(Activity[EmptyPlayer, EmptyTeam]):
         babase.set_analytics_screen('Joining Screen')
 
 
-class TransitionActivity(Activity[EmptyPlayer, EmptyTeam]):
+class TransitionActivity(Activity[EmptyPlayer]):
     """A simple overlay to fade out/in.
 
     Useful as a bare minimum transition between two level based activities.
@@ -132,7 +131,7 @@ class TransitionActivity(Activity[EmptyPlayer, EmptyTeam]):
         _bascenev1.timer(0.1, self.end)
 
 
-class ScoreScreenActivity(Activity[EmptyPlayer, EmptyTeam]):
+class ScoreScreenActivity(Activity[EmptyPlayer]):
     """A standard score screen that fades in and shows stuff for a while.
 
     After a specified delay, player input is assigned to end the activity.

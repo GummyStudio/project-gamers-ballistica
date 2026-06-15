@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Generic, TypeVar
 import babase
 import _bascenev1
 from bascenev1._dependency import DependencyComponent
-from bascenev1._team import Team
 from bascenev1._messages import UNHANDLED
 from bascenev1._player import Player
 
@@ -19,10 +18,9 @@ if TYPE_CHECKING:
     import bascenev1
 
 PlayerT = TypeVar('PlayerT', bound=Player)
-TeamT = TypeVar('TeamT', bound=Team)
 
 
-class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
+class Activity(DependencyComponent, Generic[PlayerT]):
     """Units of execution wrangled by a bascenev1.Session.
 
     Category: Gameplay Classes
@@ -39,13 +37,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
        This attribute is deprecated and should be avoided when possible;
        activities should pull all values they need from the 'settings' arg
        passed to the Activity __init__ call."""
-
-    teams: list[TeamT]
-    """The list of bascenev1.Team-s in the Activity. This gets populated just
-       before on_begin() is called and is updated automatically as players
-       join or leave the game. (at least in free-for-all mode where every
-       player gets their own team; in teams mode there are always 2 teams
-       regardless of the player count)."""
 
     players: list[PlayerT]
     """The list of bascenev1.Player-s in the Activity. This gets populated
@@ -141,8 +132,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
         # Player/Team types should have been specified as type args;
         # grab those.
         self._playertype: type[PlayerT]
-        self._teamtype: type[TeamT]
-        self._setup_player_and_team_types()
 
         # FIXME: Relocate or remove the need for this stuff.
         self.paused_text: bascenev1.Actor | None = None
@@ -176,7 +165,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
         self._last_prune_dead_actors_time = babase.apptime()
         self._prune_dead_actors_timer: bascenev1.Timer | None = None
 
-        self.teams = []
         self.players = []
 
         self.lobby = None
@@ -479,10 +467,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
         # Inherit stats from the session.
         self._stats = session.stats
 
-        # Add session's teams in.
-        for team in session.sessionteams:
-            self.add_team(team)
-
         # Add session's players in.
         for player in session.sessionplayers:
             self.add_player(player)
@@ -607,57 +591,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
         self._delay_delete_players.append(player)
         self._players_that_left.append(weakref.ref(player))
 
-    def add_team(self, sessionteam: bascenev1.SessionTeam) -> None:
-        """Add a team to the Activity
-
-        (internal)
-        """
-        assert not self.expired
-
-        with self.context:
-            sessionteam.activityteam = team = self.create_team(sessionteam)
-            team.postinit(sessionteam)
-            self.teams.append(team)
-            try:
-                self.on_team_join(team)
-            except Exception:
-                logging.exception('Error in on_team_join for %s.', self)
-
-    def remove_team(self, sessionteam: bascenev1.SessionTeam) -> None:
-        """Remove a team from a Running Activity
-
-        (internal)
-        """
-        assert not self.expired
-        assert sessionteam.activityteam is not None
-
-        team: Any = sessionteam.activityteam
-        assert isinstance(team, self._teamtype)
-
-        assert team in self.teams
-        self.teams.remove(team)
-        assert team not in self.teams
-
-        with self.context:
-            # Make a decent attempt to persevere if user code breaks.
-            try:
-                self.on_team_leave(team)
-            except Exception:
-                logging.exception('Error in on_team_leave for %s.', self)
-            try:
-                team.leave()
-            except Exception:
-                logging.exception('Error on leave for %s in %s.', team, self)
-
-            sessionteam.activityteam = None
-
-        # Add the team to a list to keep it around for a while. This is
-        # to discourage logic from firing on team object death, which
-        # may not happen until activity end if something is holding refs
-        # to it.
-        self._delay_delete_teams.append(team)
-        self._teams_that_left.append(weakref.ref(team))
-
     def _reset_session_player_for_no_activity(
         self, sessionplayer: bascenev1.SessionPlayer
     ) -> None:
@@ -684,37 +617,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
         # These should never fail I think...
         sessionplayer.setactivity(None)
         sessionplayer.activityplayer = None
-
-    # noinspection PyUnresolvedReferences
-    def _setup_player_and_team_types(self) -> None:
-        """Pull player and team types from our typing.Generic params."""
-
-        # TODO: There are proper calls for pulling these in Python 3.8;
-        # should update this code when we adopt that.
-        # NOTE: If we get Any as PlayerT or TeamT (generally due
-        # to no generic params being passed) we automatically use the
-        # base class types, but also warn the user since this will mean
-        # less type safety for that class. (its better to pass the base
-        # player/team types explicitly vs. having them be Any)
-        if not TYPE_CHECKING:
-            self._playertype = type(self).__orig_bases__[-1].__args__[0]
-            if not isinstance(self._playertype, type):
-                self._playertype = Player
-                print(
-                    f'ERROR: {type(self)} was not passed a Player'
-                    f' type argument; please explicitly pass bascenev1.Player'
-                    f' if you do not want to override it.'
-                )
-            self._teamtype = type(self).__orig_bases__[-1].__args__[1]
-            if not isinstance(self._teamtype, type):
-                self._teamtype = Team
-                print(
-                    f'ERROR: {type(self)} was not passed a Team'
-                    f' type argument; please explicitly pass bascenev1.Team'
-                    f' if you do not want to override it.'
-                )
-        assert issubclass(self._playertype, Player)
-        assert issubclass(self._teamtype, Team)
 
     @classmethod
     def _check_activity_death(
@@ -772,7 +674,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
 
         self._expire_actors()
         self._expire_players()
-        self._expire_teams()
 
         # This will kill all low level stuff: Timers, Nodes, etc., which
         # should clear up any remaining refs to our Activity and allow us
@@ -822,35 +723,6 @@ class Activity(DependencyComponent, Generic[PlayerT, TeamT]):
                 pass
             except Exception:
                 logging.exception('Error expiring %s.', player)
-
-    def _expire_teams(self) -> None:
-        # Issue warnings for any teams that left the game but don't
-        # get freed soon.
-        for ex_team in (p() for p in self._teams_that_left):
-            if ex_team is not None:
-                babase.verify_object_death(ex_team)
-
-        for team in self.teams:
-            # This should allow our bascenev1.Team instance to die.
-            # Complain if that doesn't happen.
-            babase.verify_object_death(team)
-
-            try:
-                team.expire()
-            except Exception:
-                logging.exception('Error expiring %s.', team)
-
-            try:
-                sessionteam = team.sessionteam
-                sessionteam.activityteam = None
-            except babase.SessionTeamNotFoundError:
-                # It is expected that Team objects may last longer than
-                # the SessionTeam they came from (game objects may hold
-                # team references past the point at which the underlying
-                # player/team has left the game)
-                pass
-            except Exception:
-                logging.exception('Error expiring Team %s.', team)
 
     def _prune_delay_deletes(self) -> None:
         self._delay_delete_players.clear()

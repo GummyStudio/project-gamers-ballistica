@@ -148,10 +148,6 @@ from bascenev1._activity import Activity
 from bascenev1._activitytypes import JoinActivity, ScoreScreenActivity
 from bascenev1._actor import Actor
 from bascenev1._appmode import SceneV1AppMode
-from bascenev1._campaign import init_campaigns, Campaign
-from bascenev1._collision import Collision, getcollision
-from bascenev1._coopgame import CoopGameActivity
-from bascenev1._coopsession import CoopSession
 from bascenev1._debug import print_live_object_warnings
 from bascenev1._dependency import (
     Dependency,
@@ -159,10 +155,7 @@ from bascenev1._dependency import (
     DependencySet,
     AssetPackage,
 )
-from bascenev1._dualteamsession import DualTeamSession
-from bascenev1._freeforallsession import FreeForAllSession
 from bascenev1._gameactivity import GameActivity
-from bascenev1._gameresults import GameResults
 from bascenev1._gameutils import (
     animate,
     animate_array,
@@ -175,32 +168,6 @@ from bascenev1._gameutils import (
 )
 from bascenev1._level import Level
 from bascenev1._lobby import Lobby, Chooser
-from bascenev1._map import (
-    get_filtered_map_name,
-    get_map_class,
-    get_map_display_string,
-    Map,
-    register_map,
-)
-from bascenev1._messages import (
-    CelebrateMessage,
-    DeathType,
-    DieMessage,
-    DropMessage,
-    DroppedMessage,
-    FreezeMessage,
-    HitMessage,
-    ImpactDamageMessage,
-    OutOfBoundsMessage,
-    PickedUpMessage,
-    PickUpMessage,
-    PlayerDiedMessage,
-    PlayerProfilesChangedMessage,
-    ShouldShatterMessage,
-    StandMessage,
-    ThawMessage,
-    UNHANDLED,
-)
 from bascenev1._multiteamsession import (
     MultiTeamSession,
     DEFAULT_TEAM_COLORS,
@@ -209,7 +176,6 @@ from bascenev1._multiteamsession import (
 from bascenev1._music import MusicType, setmusic
 from bascenev1._net import HostInfo
 from bascenev1._nodeactor import NodeActor
-from bascenev1._powerup import get_default_powerup_distribution
 from bascenev1._profile import (
     get_player_colors,
     get_player_profile_icon,
@@ -221,7 +187,6 @@ from bascenev1._playlist import (
     get_default_teams_playlist,
     filter_playlist,
 )
-from bascenev1._powerup import PowerupMessage, PowerupAcceptMessage
 from bascenev1._score import ScoreType, ScoreConfig
 from bascenev1._settings import (
     BoolSetting,
@@ -238,8 +203,7 @@ from bascenev1._session import (
     set_max_players_override,
 )
 from bascenev1._stats import PlayerScoredMessage, PlayerRecord, Stats
-from bascenev1._team import SessionTeam, Team, EmptyTeam
-from bascenev1._teamgame import TeamGameActivity
+
 
 __all__ = [
     'Activity',

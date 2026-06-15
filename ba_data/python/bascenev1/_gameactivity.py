@@ -27,10 +27,9 @@ if TYPE_CHECKING:
     import bascenev1
 
 PlayerT = TypeVar('PlayerT', bound='bascenev1.Player')
-TeamT = TypeVar('TeamT', bound='bascenev1.Team')
 
 
-class GameActivity(Activity[PlayerT, TeamT]):
+class GameActivity(Activity[PlayerT]):
     """Common base class for all game bascenev1.Activities.
 
     Category: **Gameplay Classes**

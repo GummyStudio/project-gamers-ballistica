@@ -484,14 +484,11 @@ class Chooser:
 
         assert self._text_node
         spacing = 350
-        sessionteams = self.lobby.sessionteams
         offs = (
-            spacing * -0.5 * len(sessionteams)
+            spacing * -0.5
             + spacing * self._selected_team_index
             + 250
         )
-        if len(sessionteams) > 1:
-            offs -= 35
         animate_array(
             self._text_node,
             'position',
@@ -677,31 +674,6 @@ class Chooser:
         if not self._ready:
             if babase.app.config.get('Auto Balance Teams', False):
                 lobby = self.lobby
-                sessionteams = lobby.sessionteams
-                if len(sessionteams) > 1:
-                    # First, calc how many players are on each team
-                    # ..we need to count both active players and
-                    # choosers that have been marked as ready.
-                    team_player_counts = {}
-                    for sessionteam in sessionteams:
-                        team_player_counts[sessionteam.id] = len(
-                            sessionteam.players
-                        )
-                    for chooser in lobby.choosers:
-                        if chooser.ready:
-                            team_player_counts[chooser.sessionteam.id] += 1
-                    largest_team_size = max(team_player_counts.values())
-                    smallest_team_size = min(team_player_counts.values())
-
-                    # Force switch if we're on the biggest sessionteam
-                    # and there's a smaller one available.
-                    if (
-                        largest_team_size != smallest_team_size
-                        and team_player_counts[self.sessionteam.id]
-                        >= largest_team_size
-                    ):
-                        force_team_switch = True
-
         # Either force switch teams, or actually for realsies do the set-ready.
         if force_team_switch:
             self._errorsound.play()
@@ -738,17 +710,6 @@ class Chooser:
             if not self._text_node:
                 logging.error('got ChangeMessage after nodes died')
                 return
-
-            if msg.what == 'team':
-                sessionteams = self.lobby.sessionteams
-                if len(sessionteams) > 1:
-                    self._swish_sound.play()
-                self._selected_team_index = (
-                    self._selected_team_index + msg.value
-                ) % len(sessionteams)
-                self._update_text()
-                self.update_position()
-                self._update_icon()
 
             elif msg.what == 'profileindex':
                 if len(self._profilenames) == 1:
@@ -820,10 +781,7 @@ class Chooser:
     def get_color(self) -> Sequence[float]:
         """Return the currently selected color."""
         val: Sequence[float]
-        if self.lobby.use_team_colors:
-            val = self.lobby.sessionteams[self._selected_team_index].color
-        else:
-            val = self._color
+        val = self._color
         if len(val) != 3:
             print('get_color: ignoring invalid color of len', len(val))
             val = (0, 1, 0)
@@ -837,28 +795,6 @@ class Chooser:
         # If we're using team colors we wanna make sure our highlight color
         # isn't too close to any other team's color.
         highlight = list(self._highlight)
-        if self.lobby.use_team_colors:
-            for i, sessionteam in enumerate(self.lobby.sessionteams):
-                if i != self._selected_team_index:
-                    # Find the dominant component of this sessionteam's color
-                    # and adjust ours so that the component is
-                    # not super-dominant.
-                    max_val = 0.0
-                    max_index = 0
-                    for j in range(3):
-                        if sessionteam.color[j] > max_val:
-                            max_val = sessionteam.color[j]
-                            max_index = j
-                    that_color_for_us = highlight[max_index]
-                    our_second_biggest = max(
-                        highlight[(max_index + 1) % 3],
-                        highlight[(max_index + 2) % 3],
-                    )
-                    diff = that_color_for_us - our_second_biggest
-                    if diff > 0:
-                        highlight[max_index] -= diff * 0.6
-                        highlight[(max_index + 1) % 3] += diff * 0.3
-                        highlight[(max_index + 2) % 3] += diff * 0.2
         return highlight
 
     def getplayer(self) -> bascenev1.SessionPlayer:
@@ -929,19 +865,11 @@ class Lobby:
             sessionplayer.resetinput()
 
     def __init__(self) -> None:
-        from bascenev1._team import SessionTeam
-        from bascenev1._coopsession import CoopSession
 
         session = _bascenev1.getsession()
         self._use_team_colors = session.use_team_colors
-        if session.use_teams:
-            self._sessionteams = [
-                weakref.ref(team) for team in session.sessionteams
-            ]
-        else:
-            self._dummy_teams = SessionTeam()
-            self._sessionteams = [weakref.ref(self._dummy_teams)]
-        v_offset = -150 if isinstance(session, CoopSession) else -50
+        self._sessionteams = []
+        v_offset = -50
         self.choosers: list[Chooser] = []
         self.base_v_offset = v_offset
         self.update_positions()
