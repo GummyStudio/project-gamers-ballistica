@@ -27,7 +27,6 @@ from baclassic import _input
 if TYPE_CHECKING:
     from typing import Callable, Any, Sequence
 
-    from bascenev1lib.actor import spazappearance
     from bauiv1lib.party import PartyWindow
 
     from baclassic._appdelegate import AppDelegate
@@ -80,10 +79,6 @@ class ClassicSubsystem(babase.AppSubsystem):
         # Main Menu.
         self.main_menu_did_initial_transition = False
         self.main_menu_last_news_fetch_time: float | None = None
-
-        # Spaz.
-        self.spaz_appearances: dict[str, spazappearance.Appearance] = {}
-        self.last_spaz_turbo_warn_time = babase.AppTime(-99999.0)
 
         # Server Mode.
         self.server: ServerController | None = None
@@ -152,7 +147,6 @@ class ClassicSubsystem(babase.AppSubsystem):
 
     @override
     def on_app_loading(self) -> None:
-        from bascenev1lib.actor import spazappearance
         from bascenev1lib import maps as stdmaps
 
         from baclassic._appdelegate import AppDelegate
@@ -193,8 +187,6 @@ class ClassicSubsystem(babase.AppSubsystem):
             stdmaps.Rampage,
         ]:
             bascenev1.register_map(maptype)
-
-        spazappearance.register_appearances()
         bascenev1.init_campaigns()
 
         launch_count = cfg.get('launchCount', 0)

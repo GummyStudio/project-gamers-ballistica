@@ -594,11 +594,10 @@ class EditProfileWindow(bui.Window):
 
     def refresh_characters(self) -> None:
         """Refresh available characters/icons."""
-        from bascenev1lib.actor import spazappearance
 
         assert bui.app.classic is not None
 
-        self._spazzes = spazappearance.get_appearances()
+        self._spazzes = []
         self._spazzes.sort()
         self._icon_textures = [
             bui.gettexture(bui.app.classic.spaz_appearances[s].icon_texture)

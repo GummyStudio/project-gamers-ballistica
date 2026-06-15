@@ -356,7 +356,6 @@ class ProfileBrowserWindow(bui.Window):
         # pylint: disable=too-many-statements
         from efro.util import asserttype
         from bascenev1 import PlayerProfilesChangedMessage
-        from bascenev1lib.actor import spazappearance
 
         assert bui.app.classic is not None
 
@@ -372,18 +371,9 @@ class ProfileBrowserWindow(bui.Window):
         assert self._profiles is not None
         items = list(self._profiles.items())
         items.sort(key=lambda x: asserttype(x[0], str).lower())
-        spazzes = spazappearance.get_appearances()
-        spazzes.sort()
-        icon_textures = [
-            bui.gettexture(bui.app.classic.spaz_appearances[s].icon_texture)
-            for s in spazzes
-        ]
-        icon_tint_textures = [
-            bui.gettexture(
-                bui.app.classic.spaz_appearances[s].icon_mask_texture
-            )
-            for s in spazzes
-        ]
+        spazzes = []
+        icon_textures = []
+        icon_tint_textures = []
         index = 0
         y_val = 35 * (len(self._profiles) - 1)
         account_name: str | None

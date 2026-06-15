@@ -19,8 +19,6 @@ from bascenev1._dualteamsession import DualTeamSession
 if TYPE_CHECKING:
     from typing import Any, Sequence
 
-    from bascenev1lib.actor.playerspaz import PlayerSpaz
-
     import bascenev1
 
 PlayerT = TypeVar('PlayerT', bound='bascenev1.Player')
@@ -107,30 +105,6 @@ class TeamGameActivity(GameActivity[PlayerT, TeamT]):
                         )
         except Exception:
             logging.exception('Error in on_begin.')
-
-    @override
-    def spawn_player_spaz(
-        self,
-        player: PlayerT,
-        position: Sequence[float] | None = None,
-        angle: float | None = None,
-    ) -> PlayerSpaz:
-        """
-        Method override; spawns and wires up a standard bascenev1.PlayerSpaz
-        for a bascenev1.Player.
-
-        If position or angle is not supplied, a default will be chosen based
-        on the bascenev1.Player and their bascenev1.Team.
-        """
-        if position is None:
-            # In teams-mode get our team-start-location.
-            if isinstance(self.session, DualTeamSession):
-                position = self.map.get_start_position(player.team.id)
-            else:
-                # Otherwise do free-for-all spawn locations.
-                position = self.map.get_ffa_start_position(self.players)
-
-        return super().spawn_player_spaz(player, position, angle)
 
     # FIXME: need to unify these arguments with GameActivity.end()
     def end(  # type: ignore

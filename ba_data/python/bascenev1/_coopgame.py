@@ -15,8 +15,6 @@ from bascenev1._gameactivity import GameActivity
 if TYPE_CHECKING:
     from typing import Sequence
 
-    from bascenev1lib.actor.playerspaz import PlayerSpaz
-
     import bascenev1
 
 PlayerT = TypeVar('PlayerT', bound='bascenev1.Player')
@@ -141,20 +139,6 @@ class CoopGameActivity(GameActivity[PlayerT, TeamT]):
                     style='in_game',
                 )
                 vval -= 55
-
-    @override
-    def spawn_player_spaz(
-        self,
-        player: PlayerT,
-        position: Sequence[float] = (0.0, 0.0, 0.0),
-        angle: float | None = None,
-    ) -> PlayerSpaz:
-        """Spawn and wire up a standard player spaz."""
-        spaz = super().spawn_player_spaz(player, position, angle)
-
-        # Deaths are noteworthy in co-op games.
-        spaz.play_big_death_sound = True
-        return spaz
 
     def _award_achievement(
         self, achievement_name: str, sound: bool = True

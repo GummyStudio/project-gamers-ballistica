@@ -195,97 +195,8 @@ class MainMenuActivity(bs.Activity[bs.Player, bs.Team]):
             if not app.classic.main_menu_did_initial_transition:
                 assert self.beta_info.node
                 bs.animate(self.beta_info.node, 'opacity', {1.3: 0, 1.8: 1.0})
-
-        mesh = bs.getmesh('thePadLevel')
-        trees_mesh = bs.getmesh('trees')
-        bottom_mesh = bs.getmesh('thePadLevelBottom')
-        color_texture = bs.gettexture('thePadLevelColor')
-        trees_texture = bs.gettexture('treesColor')
-        bgtex = bs.gettexture('menuBG')
-        bgmesh = bs.getmesh('thePadBG')
-
-        # Load these last since most platforms don't use them.
-        vr_bottom_fill_mesh = bs.getmesh('thePadVRFillBottom')
-        vr_top_fill_mesh = bs.getmesh('thePadVRFillTop')
-
-        gnode = self.globalsnode
-        gnode.camera_mode = 'rotate'
-
-        tint = (1.14, 1.1, 1.0)
-        gnode.tint = tint
-        gnode.ambient_color = (1.06, 1.04, 1.03)
-        gnode.vignette_outer = (0.45, 0.55, 0.54)
-        gnode.vignette_inner = (0.99, 0.98, 0.98)
-
-        self.bottom = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': bottom_mesh,
-                    'lighting': False,
-                    'reflection': 'soft',
-                    'reflection_scale': [0.45],
-                    'color_texture': color_texture,
-                },
-            )
-        )
-        self.vr_bottom_fill = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': vr_bottom_fill_mesh,
-                    'lighting': False,
-                    'vr_only': True,
-                    'color_texture': color_texture,
-                },
-            )
-        )
-        self.vr_top_fill = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': vr_top_fill_mesh,
-                    'vr_only': True,
-                    'lighting': False,
-                    'color_texture': bgtex,
-                },
-            )
-        )
-        self.terrain = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': mesh,
-                    'color_texture': color_texture,
-                    'reflection': 'soft',
-                    'reflection_scale': [0.3],
-                },
-            )
-        )
-        self.trees = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': trees_mesh,
-                    'lighting': False,
-                    'reflection': 'char',
-                    'reflection_scale': [0.1],
-                    'color_texture': trees_texture,
-                },
-            )
-        )
-        self.bgterrain = bs.NodeActor(
-            bs.newnode(
-                'terrain',
-                attrs={
-                    'mesh': bgmesh,
-                    'color': (0.92, 0.91, 0.9),
-                    'lighting': False,
-                    'background': True,
-                    'color_texture': bgtex,
-                },
-            )
-        )
+        from bascenev1lib.actor.background import Background
+        self.bg = Background()
 
         self._update_timer = bs.Timer(1.0, self._update, repeat=True)
         self._update()
@@ -328,88 +239,13 @@ class MainMenuActivity(bs.Activity[bs.Player, bs.Team]):
                         from_window=False,  # Disable check here.
                     )
                 # ..or in normal cases go back to the main menu
-                else:
-                    if main_menu_location == 'Gather':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.gather import GatherWindow
+                # pylint: disable=cyclic-import
+                from bauiv1lib.mainmenu import MainMenuWindow
 
-                        bs.app.ui_v1.set_main_menu_window(
-                            GatherWindow(transition=None).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    elif main_menu_location == 'Watch':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.watch import WatchWindow
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            WatchWindow(transition=None).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    elif main_menu_location == 'Team Game Select':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.playlist.browser import (
-                            PlaylistBrowserWindow,
-                        )
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            PlaylistBrowserWindow(
-                                sessiontype=bs.DualTeamSession, transition=None
-                            ).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    elif main_menu_location == 'Free-for-All Game Select':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.playlist.browser import (
-                            PlaylistBrowserWindow,
-                        )
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            PlaylistBrowserWindow(
-                                sessiontype=bs.FreeForAllSession,
-                                transition=None,
-                            ).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    elif main_menu_location == 'Coop Select':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.coop.browser import CoopBrowserWindow
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            CoopBrowserWindow(
-                                transition=None
-                            ).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    elif main_menu_location == 'Benchmarks & Stress Tests':
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.debug import DebugWindow
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            DebugWindow(transition=None).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-                    else:
-                        # pylint: disable=cyclic-import
-                        from bauiv1lib.mainmenu import MainMenuWindow
-
-                        bs.app.ui_v1.set_main_menu_window(
-                            MainMenuWindow(transition=None).get_root_widget(),
-                            from_window=False,  # Disable check here.
-                        )
-
-                # attempt to show any pending offers immediately.
-                # If that doesn't work, try again in a few seconds
-                # (we may not have heard back from the server)
-                # ..if that doesn't work they'll just have to wait
-                # until the next opportunity.
-                if not specialoffer.show_offer():
-
-                    def try_again() -> None:
-                        if not specialoffer.show_offer():
-                            # Try one last time..
-                            bui.apptimer(2.0, specialoffer.show_offer)
-
-                    bui.apptimer(2.0, try_again)
+                bs.app.ui_v1.set_main_menu_window(
+                    MainMenuWindow(transition=None).get_root_widget(),
+                    from_window=False,  # Disable check here.
+                )
 
         app.classic.main_menu_did_initial_transition = True
 
@@ -1100,7 +936,6 @@ def _preload2() -> None:
 
 
 def _preload3() -> None:
-    from bascenev1lib.actor.spazfactory import SpazFactory
 
     for mname in ['bomb', 'bombSticky', 'impactBomb']:
         bs.getmesh(mname)
@@ -1114,7 +949,6 @@ def _preload3() -> None:
         bs.gettexture(tname)
     for sname in ['freeze', 'fuse01', 'activateBeep', 'warnBeep']:
         bs.getsound(sname)
-    SpazFactory.get()
     bui.apptimer(0.2, _preload4)
 
 

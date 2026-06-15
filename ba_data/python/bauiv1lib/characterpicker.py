@@ -31,7 +31,6 @@ class CharacterPicker(PopupWindow):
         selected_character: str | None = None,
     ):
         # pylint: disable=too-many-locals
-        from bascenev1lib.actor import spazappearance
 
         assert bui.app.classic is not None
 
@@ -48,8 +47,7 @@ class CharacterPicker(PopupWindow):
         self._transitioning_out = False
 
         # make a list of spaz icons
-        self._spazzes = spazappearance.get_appearances()
-        self._spazzes.sort()
+        self._spazzes = []
         self._icon_textures = [
             bui.gettexture(bui.app.classic.spaz_appearances[s].icon_texture)
             for s in self._spazzes

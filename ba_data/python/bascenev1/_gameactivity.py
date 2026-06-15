@@ -23,7 +23,6 @@ from bascenev1 import _music
 if TYPE_CHECKING:
     from typing import Any, Callable, Sequence
 
-    from bascenev1lib.actor.playerspaz import PlayerSpaz
     from bascenev1lib.actor.bomb import TNTSpawner
     import bascenev1
 
@@ -546,39 +545,6 @@ class GameActivity(Activity[PlayerT, TeamT]):
         # By default, just spawn a dude.
         self.spawn_player(player)
 
-    @override
-    def handlemessage(self, msg: Any) -> Any:
-        if isinstance(msg, PlayerDiedMessage):
-            # pylint: disable=cyclic-import
-            from bascenev1lib.actor.spaz import Spaz
-
-            player = msg.getplayer(self.playertype)
-            killer = msg.getkillerplayer(self.playertype)
-
-            # Inform our stats of the demise.
-            self.stats.player_was_killed(
-                player, killed=msg.killed, killer=killer
-            )
-
-            # Award the killer points if he's on a different team.
-            # FIXME: This should not be linked to Spaz actors.
-            # (should move get_death_points to Actor or make it a message)
-            if killer and killer.team is not player.team:
-                assert isinstance(killer.actor, Spaz)
-                pts, importance = killer.actor.get_death_points(msg.how)
-                if not self.has_ended():
-                    self.stats.player_scored(
-                        killer,
-                        pts,
-                        kill=True,
-                        victim_player=player,
-                        importance=importance,
-                        showpoints=self.show_kill_points,
-                    )
-        else:
-            return super().handlemessage(msg)
-        return None
-
     def _show_scoreboard_info(self) -> None:
         """Create the game info display.
 
@@ -941,76 +907,9 @@ class GameActivity(Activity[PlayerT, TeamT]):
             self.spawn_player(player)
 
     def spawn_player(self, player: PlayerT) -> bascenev1.Actor:
-        """Spawn *something* for the provided bascenev1.Player.
-
-        The default implementation simply calls spawn_player_spaz().
-        """
+        """Spawn *something* for the provided bascenev1.Player."""
         assert player  # Dead references should never be passed as args.
-
-        return self.spawn_player_spaz(player)
-
-    def spawn_player_spaz(
-        self,
-        player: PlayerT,
-        position: Sequence[float] = (0, 0, 0),
-        angle: float | None = None,
-    ) -> PlayerSpaz:
-        """Create and wire up a bascenev1.PlayerSpaz for the provided Player."""
-        # pylint: disable=too-many-locals
-        # pylint: disable=cyclic-import
-        from bascenev1._gameutils import animate
-        from bascenev1._coopsession import CoopSession
-        from bascenev1lib.actor.playerspaz import PlayerSpaz
-
-        name = player.getname()
-        color = player.color
-        highlight = player.highlight
-
-        playerspaztype = getattr(player, 'playerspaztype', PlayerSpaz)
-        if not issubclass(playerspaztype, PlayerSpaz):
-            playerspaztype = PlayerSpaz
-
-        light_color = babase.normalized_color(color)
-        display_color = babase.safecolor(color, target_intensity=0.75)
-        spaz = playerspaztype(
-            color=color,
-            highlight=highlight,
-            character=player.character,
-            player=player,
-        )
-
-        player.actor = spaz
-        assert spaz.node
-
-        # If this is co-op and we're on Courtyard or Runaround, add the
-        # material that allows us to collide with the player-walls.
-        # FIXME: Need to generalize this.
-        if isinstance(self.session, CoopSession) and self.map.getname() in [
-            'Courtyard',
-            'Tower D',
-        ]:
-            mat = self.map.preloaddata['collide_with_wall_material']
-            assert isinstance(spaz.node.materials, tuple)
-            assert isinstance(spaz.node.roller_materials, tuple)
-            spaz.node.materials += (mat,)
-            spaz.node.roller_materials += (mat,)
-
-        spaz.node.name = name
-        spaz.node.name_color = display_color
-        spaz.connect_controls_to_player()
-
-        # Move to the stand position and add a flash of light.
-        spaz.handlemessage(
-            StandMessage(
-                position, angle if angle is not None else random.uniform(0, 360)
-            )
-        )
-        self._spawn_sound.play(1, position=spaz.node.position)
-        light = _bascenev1.newnode('light', attrs={'color': light_color})
-        spaz.node.connectattr('position', light, 'position')
-        animate(light, 'intensity', {0: 0, 0.25: 1, 0.5: 0})
-        _bascenev1.timer(0.5, light.delete)
-        return spaz
+        return player
 
     def setup_standard_powerup_drops(self, enable_tnt: bool = True) -> None:
         """Create standard powerup drops for the current map."""

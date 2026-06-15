@@ -271,9 +271,7 @@ class AccountViewerWindow(PopupWindow):
                         if data['profile'] is not None:
                             profile = data['profile']
                             assert bui.app.classic is not None
-                            character = bui.app.classic.spaz_appearances.get(
-                                profile['character'], None
-                            )
+                            character = None
                             if character is not None:
                                 tint_color = (
                                     profile['color']

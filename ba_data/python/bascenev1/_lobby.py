@@ -410,19 +410,6 @@ class Chooser:
         else:
             character = self._profiles[self._profilename]['character']
 
-            # At the moment we're not properly pulling the list
-            # of available characters from clients, so profiles might use a
-            # character not in their list. For now, just go ahead and add
-            # a character name to their list as long as we're aware of it.
-            # This just means they won't always be able to override their
-            # character to others they own, but profile characters
-            # should work (and we validate profiles on the master server
-            # so no exploit opportunities)
-            if (
-                character not in self._character_names
-                and character in babase.app.classic.spaz_appearances
-            ):
-                self._character_names.append(character)
             self._character_index = self._character_names.index(character)
             self._color, self._highlight = get_player_profile_colors(
                 self._profilename, profiles=self._profiles
@@ -466,11 +453,7 @@ class Chooser:
 
         # Filter out any characters we're unaware of.
         for profile in list(self._profiles.items()):
-            if (
-                profile[1].get('character', '')
-                not in app.classic.spaz_appearances
-            ):
-                profile[1]['character'] = 'Spaz'
+            profile[1]['character'] = 'Spaz'
 
         # Add in a random one so we're ok even if there's no user profiles.
         self._profiles['_random'] = {}
@@ -893,17 +876,9 @@ class Chooser:
             self.icon.tint_color = (0, 1, 0)
             return
 
-        try:
-            tex_name = babase.app.classic.spaz_appearances[
-                self._character_names[self._character_index]
-            ].icon_texture
-            tint_tex_name = babase.app.classic.spaz_appearances[
-                self._character_names[self._character_index]
-            ].icon_mask_texture
-        except Exception:
-            logging.exception('Error updating char icon list')
-            tex_name = 'neoSpazIcon'
-            tint_tex_name = 'neoSpazIconColorMask'
+        logging.exception('Error updating char icon list')
+        tex_name = 'neoSpazIcon'
+        tint_tex_name = 'neoSpazIconColorMask'
 
         tex = _bascenev1.gettexture(tex_name)
         tint_tex = _bascenev1.gettexture(tint_tex_name)
@@ -1017,13 +992,12 @@ class Lobby:
     def reload_profiles(self) -> None:
         """Reload available player profiles."""
         # pylint: disable=cyclic-import
-        from bascenev1lib.actor.spazappearance import get_appearances
 
         assert babase.app.classic is not None
 
         # We may have gained or lost character names if the user
         # bought something; reload these too.
-        self.character_names_local_unlocked = get_appearances()
+        self.character_names_local_unlocked = []
         self.character_names_local_unlocked.sort(key=lambda x: x.lower())
 
         # Do any overall prep we need to such as creating account profile.
