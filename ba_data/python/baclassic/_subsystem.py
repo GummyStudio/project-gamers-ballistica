@@ -488,10 +488,6 @@ class ClassicSubsystem(babase.AppSubsystem):
 
         return _tournament.get_tournament_prize_strings(entry)
 
-    def getcampaign(self, name: str) -> bascenev1.Campaign:
-        """Return a campaign by name."""
-        return self.campaigns[name]
-
     def get_next_tip(self) -> str:
         """Returns the next tip to be displayed."""
         if not self.tips:

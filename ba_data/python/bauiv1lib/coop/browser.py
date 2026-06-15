@@ -631,20 +631,6 @@ class CoopBrowserWindow(bui.Window):
         h_spacing = 200
         campaign_buttons = []
         if self._campaign_difficulty == 'easy':
-            campaignname = 'Easy'
-        else:
-            campaignname = 'Default'
-        items = [
-            campaignname + ':Onslaught Training',
-            campaignname + ':Rookie Onslaught',
-            campaignname + ':Rookie Football',
-            campaignname + ':Pro Onslaught',
-            campaignname + ':Pro Football',
-            campaignname + ':Pro Runaround',
-            campaignname + ':Uber Onslaught',
-            campaignname + ':Uber Football',
-            campaignname + ':Uber Runaround',
-        ]
         items += [campaignname + ':The Last Stand']
         if self._selected_campaign_level is None:
             self._selected_campaign_level = items[0]
