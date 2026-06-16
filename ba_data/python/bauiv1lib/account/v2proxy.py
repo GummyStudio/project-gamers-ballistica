@@ -178,7 +178,6 @@ class V2ProxySignInWindow(bui.Window):
             isinstance(response, bacommon.cloud.LoginProxyStateQueryResponse)
             and response.state is response.State.FAIL
         ):
-            bui.getsound('error').play()
             bui.screenmessage(bui.Lstr(resource='errorText'), color=(1, 0, 0))
             self._done()
             return

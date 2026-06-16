@@ -73,8 +73,7 @@ class SpecialOfferWindow(bui.Window):
         # This can pop up suddenly, so lets block input for 1 second.
         bui.lock_all_input()
         bui.apptimer(1.0, bui.unlock_all_input)
-        bui.getsound('ding').play()
-        bui.apptimer(0.3, bui.getsound('ooh').play)
+        bui.apptimer(0.3, bui.getsound('blank').play)
         self._offer = copy.deepcopy(offer)
         self._width = 580
         self._height = 590

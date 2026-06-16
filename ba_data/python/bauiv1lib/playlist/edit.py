@@ -281,7 +281,6 @@ class PlaylistEditWindow(bui.Window):
         if not self._root_widget or self._root_widget.transitioning_out:
             return
 
-        bui.getsound('powerdown01').play()
         bui.containerwidget(edit=self._root_widget, transition='out_right')
         assert bui.app.classic is not None
         bui.app.ui_v1.set_main_menu_window(
@@ -332,16 +331,13 @@ class PlaylistEditWindow(bui.Window):
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantSaveAlreadyExistsText')
             )
-            bui.getsound('error').play()
             return
         if not new_name:
-            bui.getsound('error').play()
             return
         if not self._editcontroller.get_playlist():
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantSaveEmptyListText')
             )
-            bui.getsound('error').play()
             return
 
         # We couldn't actually replace the default list anyway, but disallow
@@ -350,7 +346,6 @@ class PlaylistEditWindow(bui.Window):
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantOverwriteDefaultText')
             )
-            bui.getsound('error').play()
             return
 
         # If we had an old one, delete it.
@@ -376,7 +371,6 @@ class PlaylistEditWindow(bui.Window):
         plus.run_v1_account_transactions()
 
         bui.containerwidget(edit=self._root_widget, transition='out_right')
-        bui.getsound('gunCocking').play()
         assert bui.app.classic is not None
         bui.app.ui_v1.set_main_menu_window(
             PlaylistCustomizeBrowserWindow(
@@ -388,7 +382,6 @@ class PlaylistEditWindow(bui.Window):
         )
 
     def _save_press_with_sound(self) -> None:
-        bui.getsound('swish').play()
         self._save_press()
 
     def _select(self, index: int) -> None:
@@ -471,5 +464,4 @@ class PlaylistEditWindow(bui.Window):
             index = len(playlist) - 1
         self._editcontroller.set_playlist(playlist)
         self._editcontroller.set_selected_index(index)
-        bui.getsound('shieldDown').play()
         self._refresh()

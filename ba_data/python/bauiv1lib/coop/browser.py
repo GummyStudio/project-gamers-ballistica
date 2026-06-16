@@ -523,7 +523,6 @@ class CoopBrowserWindow(bui.Window):
             ):
                 PurchaseWindow(items=['pro'])
                 return
-            bui.getsound('gunCocking').play()
             if difficulty not in ('easy', 'hard'):
                 print('ERROR: invalid campaign difficulty:', difficulty)
                 difficulty = 'easy'
@@ -537,7 +536,7 @@ class CoopBrowserWindow(bui.Window):
             )
             self._refresh_campaign_row()
         else:
-            bui.getsound('click01').play()
+            pass
 
     def _refresh_campaign_row(self) -> None:
         # pylint: disable=too-many-locals
@@ -631,6 +630,7 @@ class CoopBrowserWindow(bui.Window):
         h_spacing = 200
         campaign_buttons = []
         if self._campaign_difficulty == 'easy':
+            pass
         items += [campaignname + ':The Last Stand']
         if self._selected_campaign_level is None:
             self._selected_campaign_level = items[0]
@@ -1183,7 +1183,6 @@ class CoopBrowserWindow(bui.Window):
                 bui.Lstr(resource='tournamentsDisabledWorkspaceText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         if not self._tourney_data_up_to_date:
@@ -1191,7 +1190,6 @@ class CoopBrowserWindow(bui.Window):
                 bui.Lstr(resource='tournamentCheckingStateText'),
                 color=(1, 1, 0),
             )
-            bui.getsound('error').play()
             return
 
         if tournament_button.tournament_id is None:
@@ -1199,7 +1197,6 @@ class CoopBrowserWindow(bui.Window):
                 bui.Lstr(resource='internal.unavailableNoConnectionText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         if tournament_button.required_league is not None:
@@ -1220,14 +1217,12 @@ class CoopBrowserWindow(bui.Window):
                 ),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         if tournament_button.time_remaining <= 0:
             bui.screenmessage(
                 bui.Lstr(resource='tournamentEndedText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
             return
 
         self._save_state()

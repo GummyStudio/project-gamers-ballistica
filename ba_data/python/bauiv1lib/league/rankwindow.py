@@ -197,7 +197,6 @@ class LeagueRankWindow(bui.Window):
                 ),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
 
     def _on_activity_mult_press(self) -> None:
         from bauiv1lib import confirm
@@ -273,8 +272,7 @@ class LeagueRankWindow(bui.Window):
                 position=prtb.get_screen_space_center(),
                 data=info,
             )
-        else:
-            bui.getsound('error').play()
+      
 
     def _on_power_ranking_query_response(
         self, data: dict[str, Any] | None
@@ -701,7 +699,6 @@ class LeagueRankWindow(bui.Window):
         # our_login_id = _bs.get_account_misc_read_val_2(
         #     'resolvedAccountID', None)
         if not self._can_do_more_button or our_login_id is None:
-            bui.getsound('error').play()
             bui.screenmessage(
                 bui.Lstr(resource='unavailableText'), color=(1, 0, 0)
             )
@@ -1141,7 +1138,6 @@ class LeagueRankWindow(bui.Window):
     ) -> None:
         from bauiv1lib.account import viewer
 
-        bui.getsound('swish').play()
         viewer.AccountViewerWindow(
             account_id=account_id, position=textwidget.get_screen_space_center()
         )

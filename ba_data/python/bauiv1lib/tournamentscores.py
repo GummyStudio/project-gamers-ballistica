@@ -222,9 +222,7 @@ class TournamentScoresWindow(PopupWindow):
 
         # for the moment we only work if a single player-info is present..
         if len(entry[2]) != 1:
-            bui.getsound('error').play()
             return
-        bui.getsound('swish').play()
         AccountViewerWindow(
             account_id=entry[2][0].get('a', None),
             profile_id=entry[2][0].get('p', None),

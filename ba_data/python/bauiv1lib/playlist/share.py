@@ -30,7 +30,6 @@ class SharePlaylistImportWindow(PromoCodeWindow):
     def _on_import_response(self, response: dict[str, Any] | None) -> None:
         if response is None:
             bui.screenmessage(bui.Lstr(resource='errorText'), color=(1, 0, 0))
-            bui.getsound('error').play()
             return
 
         if response['playlistType'] == 'Team Tournament':
@@ -50,7 +49,6 @@ class SharePlaylistImportWindow(PromoCodeWindow):
             ),
             color=(0, 1, 0),
         )
-        bui.getsound('gunCocking').play()
         if self._on_success_callback is not None:
             self._on_success_callback()
         bui.containerwidget(

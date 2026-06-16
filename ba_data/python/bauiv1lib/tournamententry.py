@@ -579,7 +579,7 @@ class TournamentEntryWindow(PopupWindow):
         ):
             try:
                 if not practice:
-                    bui.apptimer(0.1, bui.getsound('cashRegister').play)
+                    bui.apptimer(0.1, bui.getsound('blank').play)
                     bui.screenmessage(
                         bui.Lstr(
                             translate=(
@@ -608,7 +608,7 @@ class TournamentEntryWindow(PopupWindow):
         # launch a new session.
         if not launched:
             if not practice:
-                bui.apptimer(0.1, bui.getsound('cashRegister').play)
+                bui.apptimer(0.1, bui.getsound('blank').play)
                 bui.screenmessage(
                     bui.Lstr(
                         translate=('serverResponses', 'Entering tournament...')
@@ -648,7 +648,7 @@ class TournamentEntryWindow(PopupWindow):
                 bui.Lstr(resource='tournamentCheckingStateText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         # If we don't have a price.
@@ -657,7 +657,7 @@ class TournamentEntryWindow(PopupWindow):
                 bui.Lstr(resource='tournamentCheckingStateText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         # Deny if it looks like the tourney has ended.
@@ -665,7 +665,7 @@ class TournamentEntryWindow(PopupWindow):
             bui.screenmessage(
                 bui.Lstr(resource='tournamentEndedText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         # Deny if we don't have enough tickets.
@@ -678,7 +678,7 @@ class TournamentEntryWindow(PopupWindow):
         ticket_cost = self._purchase_price
         if ticket_count is not None and ticket_count < ticket_cost:
             getcurrency.show_get_tickets_prompt()
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             self._transition_out()
             return
 
@@ -708,7 +708,7 @@ class TournamentEntryWindow(PopupWindow):
                 bui.Lstr(resource='tournamentCheckingStateText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         # Deny if it looks like the tourney has ended.
@@ -716,7 +716,7 @@ class TournamentEntryWindow(PopupWindow):
             bui.screenmessage(
                 bui.Lstr(resource='tournamentEndedText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         cur_time = bui.apptime()
@@ -741,7 +741,7 @@ class TournamentEntryWindow(PopupWindow):
             bui.screenmessage(
                 bui.Lstr(resource='tournamentEndedText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         self._entering = True
@@ -768,7 +768,7 @@ class TournamentEntryWindow(PopupWindow):
         if not plus.get_purchased('tournament_entry_ad'):
             print('no tournament_entry_ad purchase present in _on_ad_complete')
             bui.screenmessage(bui.Lstr(resource='errorText'), color=(1, 0, 0))
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
 
         self._entering = True
@@ -807,7 +807,7 @@ class TournamentEntryWindow(PopupWindow):
             or plus.get_purchased(self._purchase_name)
             or self._entering
         ):
-            bui.getsound('error').play()
+            bui.getsound('blank').play()
             return
         self._transition_out()
 
@@ -823,5 +823,5 @@ class TournamentEntryWindow(PopupWindow):
 
     @override
     def on_popup_cancel(self) -> None:
-        bui.getsound('swish').play()
+        bui.getsound('blank').play()
         self._on_cancel()

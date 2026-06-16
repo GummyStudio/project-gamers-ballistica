@@ -83,6 +83,5 @@ class TabRow(Generic[T]):
     def _tick_and_call(
         self, call: Callable[[Any], None] | None, arg: Any
     ) -> None:
-        bui.getsound('click01').play()
         if call is not None:
             call(arg)

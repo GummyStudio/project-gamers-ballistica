@@ -203,7 +203,6 @@ class PlaylistEditController:
         if config is None:
             # If we were editing, go back to our list.
             if self._editing_game:
-                bui.getsound('powerdown01').play()
                 bui.app.ui_v1.clear_main_menu_window(transition='out_right')
                 bui.app.ui_v1.set_main_menu_window(
                     PlaylistEditWindow(
@@ -236,7 +235,6 @@ class PlaylistEditController:
                 self._playlist.insert(insert_index, copy.deepcopy(config))
                 self._selected_index = insert_index
 
-            bui.getsound('gunCocking').play()
             bui.app.ui_v1.clear_main_menu_window(transition='out_right')
             bui.app.ui_v1.set_main_menu_window(
                 PlaylistEditWindow(

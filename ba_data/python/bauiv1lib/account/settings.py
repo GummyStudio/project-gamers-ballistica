@@ -1293,7 +1293,6 @@ class AccountSettingsWindow(bui.Window):
                 bui.Lstr(resource='internal.unavailableNoConnectionText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         bui.screenmessage(bui.Lstr(resource='oneMomentText'))
@@ -1319,7 +1318,6 @@ class AccountSettingsWindow(bui.Window):
                 'Got error in manage-account-response: %s.', response
             )
             bui.screenmessage(bui.Lstr(resource='errorText'), color=(1, 0, 0))
-            bui.getsound('error').play()
             return
 
         bui.open_url(response.url)
@@ -1496,7 +1494,6 @@ class AccountSettingsWindow(bui.Window):
         from bauiv1lib.account.unlink import AccountUnlinkWindow
 
         if not self._have_unlinkable_v1_accounts():
-            bui.getsound('error').play()
             return
 
         AccountUnlinkWindow(origin_widget=self._unlink_accounts_button)
@@ -1614,7 +1611,6 @@ class AccountSettingsWindow(bui.Window):
                 bui.Lstr(resource='internal.signInNoConnectionText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
         else:
             # Success! Plug in these credentials which will begin
             # verifying them and set our primary account-handle
@@ -1670,7 +1666,6 @@ class AccountSettingsWindow(bui.Window):
         except Exception:
             logging.exception('Error resetting co-op campaign progress.')
 
-        bui.getsound('shieldDown').play()
         self._refresh()
 
     def _back(self) -> None:

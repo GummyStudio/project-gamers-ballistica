@@ -485,7 +485,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
                 ),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         # In case they cancel so we can return to this state.
@@ -507,7 +506,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
         if self._selected_playlist_name is None:
             return
         if self._selected_playlist_name == '__default__':
-            bui.getsound('error').play()
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantEditDefaultText')
             )
@@ -530,7 +528,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
             }
         )
         plus.run_v1_account_transactions()
-        bui.getsound('shieldDown').play()
 
         # (we don't use len()-1 here because the default list adds one)
         assert self._selected_playlist_index is not None
@@ -552,7 +549,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
             bui.screenmessage(
                 bui.Lstr(resource='notSignedInErrorText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
             return
 
         share.SharePlaylistImportWindow(
@@ -572,7 +568,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
                 bui.Lstr(resource='internal.unavailableNoConnectionText'),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
         share.SharePlaylistResultsWindow(name, response)
 
@@ -593,10 +588,8 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
             bui.screenmessage(
                 bui.Lstr(resource='notSignedInErrorText'), color=(1, 0, 0)
             )
-            bui.getsound('error').play()
             return
         if self._selected_playlist_name == '__default__':
-            bui.getsound('error').play()
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantShareDefaultText'),
                 color=(1, 0, 0),
@@ -633,7 +626,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
         if self._selected_playlist_name is None:
             return
         if self._selected_playlist_name == '__default__':
-            bui.getsound('error').play()
             bui.screenmessage(
                 bui.Lstr(resource=self._r + '.cantDeleteDefaultText')
             )
@@ -679,7 +671,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
                 self._selected_playlist_name
             )
             if plst is None:
-                bui.getsound('error').play()
                 return
 
         # clamp at our max playlist number
@@ -693,7 +684,6 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
                 ),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         copy_text = bui.Lstr(resource='copyOfText').evaluate()
@@ -731,5 +721,4 @@ class PlaylistCustomizeBrowserWindow(bui.Window):
         )
         plus.run_v1_account_transactions()
 
-        bui.getsound('gunCocking').play()
         self._refresh(select_playlist=test_name)

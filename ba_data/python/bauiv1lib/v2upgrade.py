@@ -32,7 +32,7 @@ class V2UpgradeWindow(bui.Window):
                 ),
             )
         )
-        bui.getsound('error').play()
+        bui.getsound('blank').play()
 
         bui.textwidget(
             parent=self._root_widget,

@@ -71,7 +71,6 @@ class CoopLevelLockedWindow(bui.Window):
         bui.containerwidget(
             edit=self._root_widget, selected_child=btn, start_button=btn
         )
-        bui.getsound('error').play()
 
     def _ok(self) -> None:
         bui.containerwidget(edit=self._root_widget, transition='out_left')

@@ -57,7 +57,6 @@ class ServerDialogWindow(bui.Window):
         )
         self._starttime = bui.apptime()
 
-        bui.getsound('swish').play()
         bui.textwidget(
             parent=self._root_widget,
             position=(self._width * 0.5, 70 + (self._height - 70) * 0.5),
@@ -141,7 +140,6 @@ class ServerDialogWindow(bui.Window):
         plus = bui.app.plus
         assert plus is not None
         if bui.apptime() - self._starttime < 1.0:
-            bui.getsound('error').play()
             return
         plus.add_v1_account_transaction(
             {
@@ -156,7 +154,6 @@ class ServerDialogWindow(bui.Window):
         plus = bui.app.plus
         assert plus is not None
         if bui.apptime() - self._starttime < 1.0:
-            bui.getsound('error').play()
             return
         plus.add_v1_account_transaction(
             {

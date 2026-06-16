@@ -142,7 +142,7 @@ class LeagueRankButton:
             if not self._button:
                 return
             if self._ticking_sound is None:
-                self._ticking_sound = bui.getsound('scoreIncrease')
+                self._ticking_sound = bui.getsound('blank')
                 self._ticking_sound.play()
             self._bg_flash = not self._bg_flash
             color_used = (
@@ -176,7 +176,6 @@ class LeagueRankButton:
                 if self._ticking_sound is not None:
                     self._ticking_sound.stop()
                     self._ticking_sound = None
-                bui.getsound('cashRegister2').play()
                 assert self._improvement_text is not None
                 diff_text = bui.textwidget(
                     parent=self._parent,

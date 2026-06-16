@@ -367,9 +367,7 @@ class PrivateGatherTab(GatherTab):
 
     def _set_sub_tab(self, value: SubTabType, playsound: bool = False) -> None:
         assert self._container
-        if playsound:
-            bui.getsound('click01').play()
-
+       
         # If switching from join to host, do a fresh state query.
         if self._state.sub_tab is SubTabType.JOIN and value is SubTabType.HOST:
             # Prevent taking any action until we've gotten a fresh state.
@@ -906,15 +904,12 @@ class PrivateGatherTab(GatherTab):
 
         if plus.get_v1_account_state() != 'signed_in':
             bui.screenmessage(bui.Lstr(resource='notSignedInErrorText'))
-            bui.getsound('error').play()
             self._refresh_sub_tab()
             return
 
         if self._hostingstate.unavailable_error is not None:
-            bui.getsound('error').play()
             return
 
-        bui.getsound('click01').play()
 
         # If we're not hosting, start.
         if self._hostingstate.party_code is None:
@@ -929,7 +924,6 @@ class PrivateGatherTab(GatherTab):
                 ticket_cost = self._hostingstate.tickets_to_host_now
                 if ticket_count is not None and ticket_count < ticket_cost:
                     show_get_tickets_prompt()
-                    bui.getsound('error').play()
                     return
             self._last_action_send_time = time.time()
             plus.add_v1_account_transaction(
@@ -953,7 +947,6 @@ class PrivateGatherTab(GatherTab):
                 callback=bui.WeakCall(self._hosting_state_response),
             )
             plus.run_v1_account_transactions()
-        bui.getsound('click01').play()
 
         self._waiting_for_start_stop_response = True
         self._refresh_sub_tab()
@@ -968,7 +961,6 @@ class PrivateGatherTab(GatherTab):
                 bui.Lstr(translate=('serverResponses', 'Invalid code.')),
                 color=(1, 0, 0),
             )
-            bui.getsound('error').play()
             return
 
         self._connect_to_party_code(code)
@@ -987,14 +979,12 @@ class PrivateGatherTab(GatherTab):
                     bui.Lstr(translate=('serverResponses', cresult.error)),
                     (1, 0, 0),
                 )
-                bui.getsound('error').play()
                 return
             self._debug_server_comm('got valid connect response')
             assert cresult.addr is not None and cresult.port is not None
             bs.connect_to_party(cresult.addr, port=cresult.port)
         except Exception:
             self._debug_server_comm('got connect response error')
-            bui.getsound('error').play()
 
     @override
     def save_state(self) -> None:

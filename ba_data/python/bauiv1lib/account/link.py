@@ -162,8 +162,7 @@ class AccountLinkCodeWindow(bui.Window):
             )
         )
         self._data = copy.deepcopy(data)
-        bui.getsound('cashRegister').play()
-        bui.getsound('swish').play()
+      
         self._cancel_button = bui.buttonwidget(
             parent=self._root_widget,
             scale=0.5,
