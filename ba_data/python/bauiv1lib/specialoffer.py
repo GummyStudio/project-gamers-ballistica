@@ -474,7 +474,6 @@ class SpecialOfferWindow(bui.Window):
                 ticket_count = None
             if ticket_count is not None and ticket_count < self._offer['price']:
                 getcurrency.show_get_tickets_prompt()
-                bui.getsound('error').play()
                 return
 
             def do_it() -> None:
@@ -484,7 +483,6 @@ class SpecialOfferWindow(bui.Window):
                     'offer:' + str(self._offer['id']), self._offer['price']
                 )
 
-            bui.getsound('swish').play()
             confirm.ConfirmWindow(
                 bui.Lstr(
                     resource='store.purchaseConfirmText',
@@ -507,7 +505,6 @@ class SpecialOfferWindow(bui.Window):
 
     def _cancel(self) -> None:
         if self._cancel_delay > 0:
-            bui.getsound('error').play()
             return
         self._transition_out('out_right')
 

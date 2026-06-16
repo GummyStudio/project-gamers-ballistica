@@ -55,5 +55,4 @@ class ResourceTypeInfoWindow(PopupWindow):
 
     @override
     def on_popup_cancel(self) -> None:
-        bui.getsound('swish').play()
         self._transition_out()
