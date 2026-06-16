@@ -173,7 +173,7 @@ class ColorPicker(PopupWindow):
     @override
     def on_popup_cancel(self) -> None:
         if not self._transitioning_out:
-            bui.getsound('swish').play()
+            bui.getsound('blank').play()
         self._transition_out()
 
 
@@ -400,7 +400,7 @@ class ColorPickerExact(PopupWindow):
     @override
     def on_popup_cancel(self) -> None:
         if not self._transitioning_out:
-            bui.getsound('swish').play()
+            bui.getsound('blank').play()
         self._transition_out()
 
 

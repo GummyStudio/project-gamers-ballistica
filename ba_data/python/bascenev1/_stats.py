@@ -288,10 +288,10 @@ class Stats:
         return self._activity()
 
     def _load_activity_media(self) -> None:
-        self.orchestrahitsound1 = _bascenev1.getsound('orchestraHit')
-        self.orchestrahitsound2 = _bascenev1.getsound('orchestraHit2')
-        self.orchestrahitsound3 = _bascenev1.getsound('orchestraHit3')
-        self.orchestrahitsound4 = _bascenev1.getsound('orchestraHit4')
+        self.orchestrahitsound1 = _bascenev1.getsound('blank')
+        self.orchestrahitsound2 = _bascenev1.getsound('blank')
+        self.orchestrahitsound3 = _bascenev1.getsound('blank')
+        self.orchestrahitsound4 = _bascenev1.getsound('blank')
 
     def reset(self) -> None:
         """Reset the stats instance completely."""

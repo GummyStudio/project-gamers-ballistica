@@ -143,7 +143,7 @@ class OnScreenKeyboardWindow(Window):
         key_color = self._key_color
         key_color_dark = self._key_color_dark
 
-        self._click_sound = _bauiv1.getsound('click01')
+        self._click_sound = _bauiv1.getsound('blank')
 
         # kill prev char keys
         for key in self._char_keys:
@@ -389,7 +389,7 @@ class OnScreenKeyboardWindow(Window):
 
         self._load_keyboard()
         if len(kbexports) < 2:
-            _bauiv1.getsound('error').play()
+            _bauiv1.getsound('blank').play()
             babase.screenmessage(
                 babase.Lstr(resource='keyboardNoOthersAvailableText'),
                 color=(1, 0, 0),
@@ -448,7 +448,7 @@ class OnScreenKeyboardWindow(Window):
 
     def _cancel(self) -> None:
         self._adapter.cancel()
-        _bauiv1.getsound('swish').play()
+        _bauiv1.getsound('blank').play()
         _bauiv1.containerwidget(edit=self._root_widget, transition='out_scale')
 
     def _done(self) -> None:

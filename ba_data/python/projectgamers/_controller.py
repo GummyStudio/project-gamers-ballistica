@@ -1,5 +1,5 @@
-
-import babase, bascenev1 as bs
+import babase
+import _bascenev1 as _bs
 from typing import Callable
 from ._fighter import Fighter
 
@@ -9,8 +9,9 @@ from ._fighter import Fighter
 # This is just a basic 
 class Controller:
     def __init__(self, port: int):
+        
         self.port = port
-        self.sessionplayer: bs.SessionPlayer
+        self.sessionplayer: _bs.SessionPlayer
 
         # An initialied character.
         self.character: Fighter = None

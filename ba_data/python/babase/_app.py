@@ -25,7 +25,7 @@ from babase._appmodeselector import AppModeSelector
 from babase._appintent import AppIntentDefault, AppIntentExec
 from babase._stringedit import StringEditSubsystem
 from babase._devconsole import DevConsoleSubsystem
-from projectgamers._controller import Controller
+
 
 if TYPE_CHECKING:
     import asyncio
@@ -220,9 +220,7 @@ class App:
             self._fade_and_shutdown_audio(),
         ]
         self._pool_thread_count = 0
-        self.controllers = [
-            Controller(1), Controller(2)
-        ]
+        
 
     def postinit(self) -> None:
         """Called after we've been inited and assigned to babase.app.
@@ -238,6 +236,10 @@ class App:
 
         self.lang = LanguageSubsystem()
         self.plugins = PluginSubsystem()
+        from projectgamers._controller import Controller
+        self.controllers = [
+            Controller(1), Controller(2)
+        ]
 
     @property
     def active(self) -> bool:

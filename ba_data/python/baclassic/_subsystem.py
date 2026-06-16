@@ -228,7 +228,7 @@ class ClassicSubsystem(babase.AppSubsystem):
             with activity.context:
                 globs = activity.globalsnode
                 if not globs.paused:
-                    bascenev1.getsound('refWhistle').play()
+                    
                     globs.paused = True
 
                 # FIXME: This should not be an attr on Actor.
@@ -258,7 +258,7 @@ class ClassicSubsystem(babase.AppSubsystem):
             with activity.context:
                 globs = activity.globalsnode
                 if globs.paused:
-                    bascenev1.getsound('refWhistle').play()
+                    
                     globs.paused = False
 
                     # FIXME: This should not be an actor attr.
@@ -739,7 +739,7 @@ class ClassicSubsystem(babase.AppSubsystem):
 
         assert app.env.gui
 
-        bauiv1.getsound('swish').play()
+       
 
         # If it exists, dismiss it; otherwise make a new one.
         party_window = (
@@ -760,8 +760,7 @@ class ClassicSubsystem(babase.AppSubsystem):
         if not in_main_menu:
             set_ui_input_device(device_id)
 
-            if babase.app.env.gui:
-                bauiv1.getsound('swish').play()
+            
 
             babase.app.ui_v1.set_main_menu_window(
                 MainMenuWindow().get_root_widget(),

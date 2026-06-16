@@ -246,7 +246,7 @@ class GameActivity(Activity[PlayerT]):
         # Go ahead and get our map loading.
         self._map_type = _map.get_map_class(self._calc_map_name(settings))
 
-        self._spawn_sound = _bascenev1.getsound('spawn')
+        self._spawn_sound = _bascenev1.getsound('blank')
         self._map_type.preload()
         self._map: bascenev1.Map | None = None
         self._powerup_drop_timer: bascenev1.Timer | None = None
@@ -406,8 +406,7 @@ class GameActivity(Activity[PlayerT]):
             return
         with self.context:
             if do_continue:
-                _bascenev1.getsound('shieldUp').play()
-                _bascenev1.getsound('cashRegister').play()
+         
                 plus.add_v1_account_transaction(
                     {'type': 'CONTINUE', 'cost': self._continue_cost}
                 )
@@ -1021,7 +1020,7 @@ class GameActivity(Activity[PlayerT]):
                 animate(cnode, 'input1', {0: 1, 0.15: 0.5}, loop=True)
                 animate(cnode, 'input2', {0: 0.1, 0.15: 0.0}, loop=True)
                 cnode.input3 = 1.0
-            _bascenev1.getsound('tick').play()
+          
         if self._standard_time_limit_time <= 0:
             self._standard_time_limit_timer = None
             self.end_game()
@@ -1037,7 +1036,7 @@ class GameActivity(Activity[PlayerT]):
                     'text': babase.Lstr(resource='timeExpiredText'),
                 },
             )
-            _bascenev1.getsound('refWhistle').play()
+            
             animate(node, 'scale', {0.0: 0.0, 0.1: 1.4, 0.15: 1.2})
 
     def _setup_tournament_time_limit(self, duration: float) -> None:
@@ -1142,7 +1141,7 @@ class GameActivity(Activity[PlayerT]):
                 animate(cnode, 'input1', {0: 1, 0.15: 0.5}, loop=True)
                 animate(cnode, 'input2', {0: 0.1, 0.15: 0.0}, loop=True)
                 cnode.input3 = 1.0
-            _bascenev1.getsound('tick').play()
+            
         if self._tournament_time_limit <= 0:
             self._tournament_time_limit_timer = None
             self.end_game()
@@ -1162,7 +1161,7 @@ class GameActivity(Activity[PlayerT]):
                     'text': tval,
                 },
             )
-            _bascenev1.getsound('refWhistle').play()
+            
             animate(node, 'scale', {0: 0.0, 0.1: 1.4, 0.15: 1.2})
 
         # Normally we just connect this to time, but since this is a bit of a

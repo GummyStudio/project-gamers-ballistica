@@ -239,7 +239,7 @@ class Session:
             if len(self.sessionplayers) >= self.max_players >= 0:
                 # Print a rejection message *only* to the client trying to
                 # join (prevents spamming everyone else in the game).
-                _bascenev1.getsound('error').play()
+                
                 _bascenev1.broadcastmessage(
                     babase.Lstr(
                         resource='playerLimitReachedText',
@@ -278,7 +278,7 @@ class Session:
                 return False
             self._player_requested_identifiers[player.id] = identifier
 
-        _bascenev1.getsound('dripity').play()
+        
         return True
 
     def on_player_leave(self, sessionplayer: bascenev1.SessionPlayer) -> None:
@@ -291,7 +291,7 @@ class Session:
             )
             return
 
-        _bascenev1.getsound('playerLeft').play()
+        
 
         activity = self._activity_weak()
 
@@ -697,7 +697,7 @@ class Session:
                     ),
                     color=(1, 1, 0),
                 )
-                _bascenev1.getsound('error').play()
+                
 
         # Otherwise just add players on the fly.
         else:

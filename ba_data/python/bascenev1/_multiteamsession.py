@@ -276,7 +276,7 @@ class MultiTeamSession(Session):
         from bascenev1._freeforallsession import FreeForAllSession
         from bascenev1._messages import CelebrateMessage
 
-        _bascenev1.timer(delay, _bascenev1.getsound('boxingBell').play)
+       
 
         if announce_winning_team:
             winning_sessionteam = results.winning_sessionteam

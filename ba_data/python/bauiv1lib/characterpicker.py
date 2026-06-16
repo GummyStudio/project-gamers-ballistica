@@ -208,5 +208,5 @@ class CharacterPicker(PopupWindow):
 
     @override
     def on_popup_cancel(self) -> None:
-        bui.getsound('swish').play()
+        bui.getsound('blank').play()
         self._transition_out()

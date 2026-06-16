@@ -194,11 +194,11 @@ class Chooser:
         sessionplayer: bascenev1.SessionPlayer,
         lobby: 'Lobby',
     ) -> None:
-        self._deek_sound = _bascenev1.getsound('deek')
-        self._click_sound = _bascenev1.getsound('click01')
-        self._punchsound = _bascenev1.getsound('punch01')
-        self._swish_sound = _bascenev1.getsound('punchSwish')
-        self._errorsound = _bascenev1.getsound('error')
+        self._deek_sound = _bascenev1.getsound('blank')
+        self._click_sound = _bascenev1.getsound('blank')
+        self._punchsound = _bascenev1.getsound('blank')
+        self._swish_sound = _bascenev1.getsound('blank')
+        self._errorsound = _bascenev1.getsound('blank')
         self._mask_texture = _bascenev1.gettexture('characterIconMask')
         self._vpos = vpos
         self._lobby = weakref.ref(lobby)
@@ -715,7 +715,7 @@ class Chooser:
                 if len(self._profilenames) == 1:
                     # This should be pretty hard to hit now with
                     # automatic local accounts.
-                    _bascenev1.getsound('error').play()
+                    pass
                 else:
                     # Pick the next player profile and assign our name
                     # and character based on that.

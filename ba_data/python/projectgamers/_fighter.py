@@ -55,6 +55,7 @@ class Fighter:
     weight = 1.0 # knockback rate
     speed = 1.0 # movement
     hurtbox = (50, 50) # size x and y
+    image_y_offs = 0
 
     def _preload(self):
         self.data = {
@@ -85,10 +86,11 @@ class Fighter:
         # 3D
         self.hurtbox = bs.newnode('region') # material shit later, and basically will handle collision
         self.position = (0, 0)
+        self.velocity = (0, 0)
        
 
         # 2D
-        self.texture = 
+        self.texture = bs.newnode('image')
         self.renderer = Renderer() # gets renderer from activitiy
 
 
@@ -159,25 +161,4 @@ class Fighter:
         self.hitstun_frames = int(self.hitstun_frames)
         return self.hitstun_frames > 0
     def update_physics(self, ground_rect):
-        # Apply movement based on state
-        if self.moving_left: self.x_velocity -= 1.5
-        if self.moving_right: self.x_velocity += 1.5
-        
-        # Apply Friction
-        self.x_velocity *= 0.85
-        self.rect.x += self.x_velocity
-
-        # Handle Jump
-        if self.wants_jump:
-            if self.x_velocity > 0: self.x_velocity = -10
-            else: self.x_velocity = 10
-            self.vel_y = 15
-            self.wants_jump = False # Reset jump after processing
-
-        # Handle Gravity & Floor Collision
-        self.vel_y -= 1
-        self.rect.y -= self.vel_y
-        
-        if self.rect.colliderect(ground_rect):
-            self.rect.y += self.vel_y
-            self.vel_y = 0
+       pass
