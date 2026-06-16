@@ -357,7 +357,6 @@ class PartyQueueWindow(bui.Window):
         from bauiv1lib.account import viewer
 
         if account_id is None:
-            bui.getsound('error').play()
             return
         viewer.AccountViewerWindow(
             account_id=account_id,
@@ -574,11 +573,9 @@ class PartyQueueWindow(bui.Window):
             return
 
         if plus.get_v1_account_ticket_count() < self._boost_tickets:
-            bui.getsound('error').play()
             getcurrency.show_get_tickets_prompt()
             return
 
-        bui.getsound('laserReverse').play()
         plus.add_v1_account_transaction(
             {
                 'type': 'PARTY_QUEUE_BOOST',

@@ -177,7 +177,6 @@ class PurchaseWindow(bui.Window):
                 ticket_count = None
             if ticket_count is not None and ticket_count < self._price:
                 getcurrency.show_get_tickets_prompt()
-                bui.getsound('error').play()
                 return
 
             def do_it() -> None:
@@ -185,7 +184,6 @@ class PurchaseWindow(bui.Window):
 
                 plus.in_game_purchase(self._items[0], self._price)
 
-            bui.getsound('swish').play()
             do_it()
 
     def _cancel(self) -> None:

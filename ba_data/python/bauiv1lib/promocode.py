@@ -218,4 +218,3 @@ async def _run_code(code: str) -> None:
     except Exception:
         logging.exception('Error sending promo code.')
         bui.screenmessage('Error sending code (see log).', color=(1, 0, 0))
-        bui.getsound('error').play()

@@ -468,7 +468,6 @@ class PlayOptionsWindow(PopupWindow):
 
     @override
     def on_popup_cancel(self) -> None:
-        bui.getsound('swish').play()
         self._transition_out()
 
     def _on_cancel_press(self) -> None:
@@ -485,7 +484,6 @@ class PlayOptionsWindow(PopupWindow):
 
         # Disallow if we have no unlocked games.
         if not self._have_at_least_one_owned:
-            bui.getsound('error').play()
             bui.screenmessage(
                 bui.Lstr(resource='playlistNoValidGamesErrorText'),
                 color=(1, 0, 0),
@@ -507,7 +505,6 @@ class PlayOptionsWindow(PopupWindow):
             else:
                 raise RuntimeError('Only teams and ffa currently supported')
             cfg['Private Party Host Session Type'] = typename
-            bui.getsound('gunCocking').play()
             assert bui.app.classic is not None
             # Note: this is a wonky situation where we aren't actually
             # the main window but we set it on behalf of the main window

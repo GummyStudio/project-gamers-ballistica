@@ -165,8 +165,7 @@ class QuitWindow:
         if ui.quit_window is not None:
             ui.quit_window.delete()
             ui.quit_window = None
-        if swish:
-            bui.getsound('swish').play()
+   
 
         if app.classic is None:
             if bui.do_once():

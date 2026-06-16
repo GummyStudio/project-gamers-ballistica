@@ -142,11 +142,9 @@ class FileSelectorWindow(bui.Window):
 
     def _on_back_press(self) -> None:
         if len(self._recent_paths) > 1:
-            bui.getsound('swish').play()
             self._recent_paths.pop()
             self._set_path(self._recent_paths.pop())
-        else:
-            bui.getsound('error').play()
+
 
     def _on_folder_entry_activated(self) -> None:
         bui.containerwidget(edit=self._root_widget, transition='out_right')
@@ -165,26 +163,22 @@ class FileSelectorWindow(bui.Window):
                     new_path = '/'.join(chunks[:-1])
                     if new_path == '':
                         new_path = '/'
-                else:
-                    bui.getsound('error').play()
+               
             else:
                 if self._path == '/':
                     test_path = self._path + entry
                 else:
                     test_path = self._path + '/' + entry
                 if os.path.isdir(test_path):
-                    bui.getsound('swish').play()
                     new_path = test_path
                 elif os.path.isfile(test_path):
                     if self._is_valid_file_path(test_path):
-                        bui.getsound('swish').play()
                         bui.containerwidget(
                             edit=self._root_widget, transition='out_right'
                         )
                         if self._callback is not None:
                             self._callback(test_path)
-                    else:
-                        bui.getsound('error').play()
+               
                 else:
                     print(
                         (
