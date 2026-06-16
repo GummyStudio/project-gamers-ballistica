@@ -219,13 +219,13 @@ class Text(bs.Actor):
         if transition_out_delay is not None:
             bs.timer(
                 transition_delay + transition_out_delay + 1.0,
-                bs.WeakCall(self.handlemessage, bs.DieMessage()),
+                bs.WeakCall(self.handlemessage, 'die'),
             )
 
     @override
     def handlemessage(self, msg: Any) -> Any:
         assert not self.expired
-        if isinstance(msg, bs.DieMessage):
+        if msg == 'die':
             if self.node:
                 self.node.delete()
             return None

@@ -19,7 +19,6 @@ from baclassic._music import MusicSubsystem
 from baclassic._accountv1 import AccountV1Subsystem
 from baclassic._ads import AdsSubsystem
 from baclassic._net import MasterServerResponseType, MasterServerV1CallThread
-from baclassic._achievement import AchievementSubsystem
 from baclassic._tips import get_all_tips
 from baclassic._store import StoreSubsystem
 from baclassic import _input
@@ -54,7 +53,6 @@ class ClassicSubsystem(babase.AppSubsystem):
 
         self.accounts = AccountV1Subsystem()
         self.ads = AdsSubsystem()
-        self.ach = AchievementSubsystem()
         self.store = StoreSubsystem()
         self.music = MusicSubsystem()
 

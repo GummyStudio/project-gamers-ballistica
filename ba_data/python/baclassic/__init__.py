@@ -25,12 +25,9 @@ classic not being present.
 import logging
 
 from baclassic._subsystem import ClassicSubsystem
-from baclassic._achievement import Achievement, AchievementSubsystem
 
 __all__ = [
     'ClassicSubsystem',
-    'Achievement',
-    'AchievementSubsystem',
 ]
 
 # Sanity check: we want to keep ballistica's dependencies and
